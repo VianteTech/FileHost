@@ -158,7 +158,7 @@ iframe{
     }
 }
 function Host(filename,content){
-    fs.writeFile(`host/${filename}.html`, content, err => {
+    fs.writeFile(`/frontend/host/${filename}.html`, content, err => {
         if (err) {
         console.error(err);
         }
@@ -224,7 +224,7 @@ app.post('/file', (req, res) => {
 `<h1>
 Thank you for using, please wait for your deployment in 4 seconds.
 </h1>
-<p style="display:none" id="wait">Typing on the search bar "https://filehost.onrender.com/host/(filename without extension).html".</p>
+<p style="display:none" id="wait">Typing on the search bar "https://domain-name/host/(filename without extension).html".</p>
 <script type="text/javascript">
     setTimeout(()=>{
         document.getElementById("wait").style.display="block";
