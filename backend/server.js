@@ -4,6 +4,7 @@ const port = process.env.PORT || 8080,
       fs = require('fs'),
       url = require('url'),
       path = require('path'),
+      http = require('http'),
       express = require('express'),
       bodyParser = require('body-parser'),
       app = express();
@@ -160,12 +161,11 @@ iframe{
             Host(obj.file[i],content)//Same here as well.
         }
         else{
-            return;
         }//if none of the conditions satisfy, do nothing or you can add return;
     }
 }
 function Host(filename,content){//Create a function named Host with 2 arguments.
-    fs.writeFile(`./host/${filename}.html`, content, err => {//Create a file if it doesn't exist, else overwrite the file.
+    fs.writeFile(`./backend/host/${filename}.html`, content, err => {//Create a file if it doesn't exist, else overwrite the file.
         if (err)
             console.error(err);
         //Check if there is an error.
@@ -184,7 +184,7 @@ function RequestChanges(arg,arg1){//Create a function named RequestChanges with 
             obj["extensions"].push("text/plain")
             obj["file"].push(path.parse(newarg[i]).name)
             //We push datas to each of the keys of obj.
-            fs.writeFile('./data/host.json', JSON.stringify(obj,null,4), function writeJSON(err) {
+            fs.writeFile('./backend/data/host.json', JSON.stringify(obj,null,4), function writeJSON(err) {
                 if (err) return console.log(err);//Check if there is an error
             });
             //Here host.json file will get some changes.
@@ -196,7 +196,7 @@ function RequestChanges(arg,arg1){//Create a function named RequestChanges with 
             obj["data"].push(newarg[i])
             obj["extensions"].push("application/pdf")
             obj["file"].push(path.parse(newarg[i]).name)
-            fs.writeFile('./data/host.json', JSON.stringify(obj,null,4), function writeJSON(err) {
+            fs.writeFile('./backend/data/host.json', JSON.stringify(obj,null,4), function writeJSON(err) {
                 if (err) return console.log(err);
             });
             DeployChanges(); 
@@ -207,7 +207,7 @@ function RequestChanges(arg,arg1){//Create a function named RequestChanges with 
             obj["data"].push(newarg[i])
             obj["extensions"].push(newarg1[i].slice(5,newarg1[i].indexOf("/")))
             obj["file"].push(path.parse(newarg[i]).name)
-            fs.writeFile('./data/host.json', JSON.stringify(obj,null,4), function writeJSON(err) {
+            fs.writeFile('./backend/data/host.json', JSON.stringify(obj,null,4), function writeJSON(err) {
                 if (err) return console.log(err);
             });
             DeployChanges();
@@ -236,7 +236,7 @@ app.get('/', (req, res) => {
 })
 //Home page.
 app.get('/host', (req, res)=>{
-    fs.readFile('./data/host.json',null, function (err, json){
+    fs.readFile('./backend/data/host.json',null, function (err, json){
         if (err) {
             res.writeHead(404);
             res.write('404|File Not Found');
@@ -254,7 +254,7 @@ app.listen(port, () => {
 });//Listen to Port 8080.
 app.get('*', (req, res) => {
     var q = url.parse(req.url,true);
-    var filename = "./host" +q.pathname;
+    var filename = "./backend/host" +q.pathname;
     fs.readFile(filename,function(err,data){
         if(err){
             res.writeHead(404,{'Content-Type':'text/html'});
