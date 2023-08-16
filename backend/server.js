@@ -3,7 +3,6 @@ let obj = require('./data/host.json')
 const port = process.env.PORT || 8080,
       fs = require('fs'),
       url = require('url'),
-      http = require('http'),
       path = require('path'),
       express = require('express'),
       bodyParser = require('body-parser'),
@@ -237,14 +236,14 @@ app.get('/', (req, res) => {
 })
 //Home page.
 app.get('/host', (req, res)=>{
-    res.writeHead(200, {
-        'Content-Type': 'application/json'
-    });
     fs.readFile('./data/host.json',null, function (err, json){
         if (err) {
             res.writeHead(404);
             res.write('404|File Not Found');
         }else{
+            res.writeHead(200, {
+                'Content-Type': 'application/json'
+            });
             res.write(json);
         }
         res.end()
